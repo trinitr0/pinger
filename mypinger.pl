@@ -1,4 +1,4 @@
-#!/use/bin/perl -w
+`#!/use/bin/perl -w
 
 #use strict;
 #use warnings;
@@ -55,6 +55,4 @@ while (@row = $sth -> fetchrow_array()){
 }
 }
 $dbh -> disconnect();
-#__END__
-
-##modified 24.07.2013 by R$
+#__END__`
