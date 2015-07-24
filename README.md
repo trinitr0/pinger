@@ -1,2 +1,2 @@
-# pinger
-ping net divice from perl
+# pinger project
+*ping net divice from perl*
