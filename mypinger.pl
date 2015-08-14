@@ -10,7 +10,7 @@ my $rv = $sth -> execute();
 
 if (!defined $rv)
 {
-  print "При выполнении запроса '$qry' возникла ошибка: " . $dbh -> errstr . "\n";
+  print "When the error occurred '$qry' : " . $dbh -> errstr . "\n";
     exit(0);
 }
 
