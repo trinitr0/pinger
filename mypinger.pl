@@ -1,58 +1,38 @@
-#!/use/bin/perl -w
-
-#use strict;
-#use warnings;
-#use Net::Telnet;
-
-#use Pg;
+use strict;
+use warnings;
 use DBI;
 
-#$DB = Pg::connectdb("host=127.0.0.1 dbname=postgres user=info_bckp password=ofra2000HaZA");
+my $qry = ("SELECT ip FROM computers WHERE name='switch150'");
 
-$dbh = DBI -> connect("DBI:Pg:dbname=postgres host=127.0.0.1 user=info_bckp password=ofra2000HaZA");
-
-$qry = ("SELECT ip FROM computers WHERE unit_id='76' ORDER BY ip");
-#$qry = "SELECT ip FROM computers WHERE name='switch02'";
-
+my $dbh = DBI -> connect ("DBI:Pg:dbname=info user=info_bckp_switch host=10.0.0.4 password=ofra2000HaZA") or die "Error connections!";
 my $sth = $dbh -> prepare($qry);
 my $rv = $sth -> execute();
 
-#my $rv = $dbh -> do($qry);
-
-while (@row = $sth -> fetchrow_array()){
-	
-	$ip = $row[0]; #get ip switch
-#	print "$ip\n";
-#	png();
-	#$ping = system "ping -c 1 -q $ip";
-	#print "$ping";
-	#if ($print > 0) {print "$ip=yes\n";}
-	#else {print "$ip=no\n";}
-#}
-
-#sub png {  
-#	    my $ip = pop @ARGV;
-	    $ping =  "ping -c 1 -q $ip";
-	    @lines = `$ping`;
-	    for $line (@lines)
-	    {
-		 if ($line =~ /\s+(\d+)% packet loss/)
-		    {
-			if ($1 eq '100')
-			         { print "$ip - FAIL!\n";     
-			         	$qry0 = ("UPDATE computers SET suffix='0' WHERE ip='$ip'");    
-						my $rv = $dbh -> do($qry0);
-#		         	 $qry = ("UPDATE computers SET suffix='1' WHERE ip='$ip;
-#			         $DB -> exec($qry);
-			         }	else
-			         { print "$ip - OK!\n";
-			         	$qry1 = ("UPDATE computers SET suffix='1' WHERE ip='$ip'");         
-						my $rv = $dbh -> do($qry1)
-#			         $qry = ("UPDATE computers SET suffix='0' WHERE ip='$ip'");
-#			         $DB -> exec($qry);
-			         }
-	    	    }
+if (!defined $rv)
+{
+  print "При выполнении запроса '$qry' возникла ошибка: " . $dbh -> errstr . "\n";
+    exit(0);
 }
+
+while (my @row = $sth -> fetchrow_array()){
+
+my $ip = $row[0];
+#my   $ip = pop @ARGV;
+my   $ping =  "ping -c 1 -q $ip";
+my   @lines = `$ping`;
+
+     for my $line (@lines)
+     {
+         if ($line =~ /\s+(\d+)% packet loss/)
+         {
+            if ($1 eq '100')
+           {
+              print "$ip - FAIL!\n";
+           }
+           else
+           {
+              print "$ip - OK!\n";
+           }
+          }
+         }
 }
-$dbh -> disconnect();
-#__END__`
