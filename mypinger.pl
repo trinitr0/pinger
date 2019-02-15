@@ -4,7 +4,7 @@ use DBI;
 
 my $qry = ("SELECT ip FROM computers WHERE name='switch150'");
 
-my $dbh = DBI -> connect ("DBI:Pg:dbname=info user=info_bckp_switch host=10.0.0.4 password=ofra2000HaZA") || "Error connections: $!";
+my $dbh = DBI -> connect ("DBI:Pg:dbname=info user=info_bckp_switch host=10.0.0.4 password=ofra2000HaZA") or "Error connections: $!";
 my $sth = $dbh -> prepare($qry);
 my $rv = $sth -> execute();
 
